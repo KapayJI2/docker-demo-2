@@ -12,7 +12,7 @@ export const getRMQConfig = (configService: ConfigService): IRMQServiceOptions =
 	],
 	queueName: configService.get('AMQP_QUEUE'),
 	serviceName: 'converter',
-	queueArguments: {
+	queueOptions: {
 		'x-dead-letter-exchange': '',
 		'x-dead-letter-routing-key': '_q_dead',
 	},
