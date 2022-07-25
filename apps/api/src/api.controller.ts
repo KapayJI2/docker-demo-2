@@ -1,4 +1,4 @@
-import { BadRequestException, Controller, Post, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { BadRequestException, Controller, Post, Get, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { GenerateImages, ImageType } from 'contracts/converter';
 import { RMQService } from 'nestjs-rmq';
@@ -32,5 +32,9 @@ export class ApiController {
 			originalname: file.originalname.split('.')[0] + '.' + params.type,
 			buffer: Buffer.from(res.images[0].image)
 		}));
+	}
+	@Get('test')
+	async testInfo() {
+		return "ok"
 	}
 }
