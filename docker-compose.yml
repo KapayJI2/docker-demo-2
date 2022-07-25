@@ -1,0 +1,52 @@
+version: '3'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: ./apps/api/Dockerfile
+    restart: always
+    volumes:
+      - ./.env:/opt/app/.env
+    networks:
+      - myNetwork
+    ports:
+      - 3002:3000
+    depends_on:
+      - rmq
+
+  rmq:
+    image: rabbitmq:3-management
+    restart: always
+    networks:
+      - myNetwork
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin
+
+  app:
+    build:
+      context: .
+      dockerfile: ./apps/app/Dockerfile
+    restart: always
+    networks:
+      - myNetwork
+    ports:
+      - 3001:80
+    env_file: ['.env']
+
+  converter:
+    build:
+      context: .
+      dockerfile: ./apps/converter/Dockerfile
+    restart: always
+    networks:
+      - myNetwork
+    volumes:
+      - ./.env:/opt/app/.env
+    depends_on:
+      - rmq
+
+networks:
+  myNetwork:
+    driver: bridge
